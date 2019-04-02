@@ -13,17 +13,17 @@ mse = zeros(length(snr), 1);
 H_A = zeros(n, Nit);
 H_B = zeros(n, Nit);
 N = 2^8;
-alpha = 0.3;
+alpha = 0:0.2:0.8;
 cont = 0;
 barStr = 'Key Generation Simulation';
 progbar = waitbar(0, 'Initialization waitBar...', 'Name', barStr);
-KDR = zeros(length(snr),1);
+KDR = zeros(length(snr),length(alpha));
 c_att = 2;                      % Exponential decay factor
 var_ch = exp(-(0:L-1)/c_att);
 varch = var_ch/sum(var_ch);    % Channel Power Profile (linear)
-KGR = zeros(length(snr),1);
+KGR = zeros(length(snr),length(alpha));
 
-%for u = 1:length(alpha)
+for u = 1:length(alpha)
     
     for w = 1:length(snr) % Loop de SNR 
 
@@ -64,7 +64,7 @@ KGR = zeros(length(snr),1);
             H_B(:,j) = fft(chanest_A, n);
 
            cont = cont + 1;
-           prog = cont/(Nit*length(snr));
+           prog = cont/(Nit*length(snr)*length(alpha));
            perc = 100*prog;
            waitbar(prog, progbar, sprintf('%.2f%% Concluded', perc));
 
@@ -93,35 +93,33 @@ KGR = zeros(length(snr),1);
         key_B_final(idx_C) = [];
 
         %% Key Disagreement Rate
-        [n_err, KDR(w)] = biterr(key_A_final, key_B_final);
+        [n_err, KDR(w,u)] = biterr(key_A_final, key_B_final);
         %% Key Generation Rate
-        n_equal = length(key_A_final) - n_err;
+        n_equal = length(key_A_final);
         
-        KGR(w) = n_equal/(n*Nit);
-
+        KGR(w,u) = n_equal/(n*Nit);
+        
 
     end
 
-%end
+end
 close(progbar);
 
 figure
-semilogy(snr, KDR, 'LineWidth', 2);
+semilogy(snr, KDR(:,1),snr,KDR(:,2),snr,KDR(:,3),snr,KDR(:,4),snr,KDR(:,5), 'LineWidth', 2);
 grid on;
 xlabel('SNR');
 ylabel('KDR');
 title('Key Disagreement Rate - Standard-Deviation Based Quantization - Phase');
-legend('KDR');
+legend('m = 0','m = 0.2','m = 0.4','m = 0.6','m = 0.8');
 
 hold on
 
 figure
-semilogy(snr, KGR, 'LineWidth', 2);
+semilogy(snr, KGR(:,1),snr,KGR(:,2),snr,KGR(:,3),snr,KGR(:,4),snr,KGR(:,5), 'LineWidth', 2);
 grid on;
 xlabel('SNR');
 ylabel('KGR');
 title('Key Generation Rate');
-legend('KGR');
+legend('m = 0','m = 0.2','m = 0.4','m = 0.6','m = 0.8');
 
-%figure
-%plot()

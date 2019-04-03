@@ -18,6 +18,7 @@ cont = 0;
 barStr = 'Key Generation Simulation';
 progbar = waitbar(0, 'Initialization waitBar...', 'Name', barStr);
 KDR = zeros(length(snr),length(alpha));
+KDR_inv = zeros(length(snr),length(alpha));
 c_att = 2;                      % Exponential decay factor
 var_ch = exp(-(0:L-1)/c_att);
 varch = var_ch/sum(var_ch);    % Channel Power Profile (linear)
@@ -70,15 +71,15 @@ for u = 1:length(alpha)
 
         end
 
-        info_A = tratamento(H_A, n*Nit, d);
-        info_B = tratamento(H_B, n*Nit, d);
+        info_A = tratamento(H_A, n*Nit, d,'fine-grained');
+        info_B = tratamento(H_B, n*Nit, d,'fine-grained');
 
         for q = 1:(n*Nit/d)
-           threshold_A_max = mean(info_A(:,q)) + alpha*std(info_A(:,q)); 
-           threshold_A_min = mean(info_A(:,q)) - alpha*std(info_A(:,q));
+           threshold_A_max = mean(info_A(:,q)) + alpha(u)*std(info_A(:,q)); 
+           threshold_A_min = mean(info_A(:,q)) - alpha(u)*std(info_A(:,q));
            key_A(:,q) = keygenerator(threshold_A_max,threshold_A_min, info_A(:,q));
-           threshold_B_max = mean(info_B(:,q)) + alpha*std(info_B(:,q)); 
-           threshold_B_min = mean(info_B(:,q)) - alpha*std(info_B(:,q));
+           threshold_B_max = mean(info_B(:,q)) + alpha(u)*std(info_B(:,q)); 
+           threshold_B_min = mean(info_B(:,q)) - alpha(u)*std(info_B(:,q));
            key_B(:,q) = keygenerator(threshold_B_max,threshold_B_min, info_B(:,q)); 
         end
 
@@ -94,14 +95,18 @@ for u = 1:length(alpha)
 
         %% Key Disagreement Rate
         [n_err, KDR(w,u)] = biterr(key_A_final, key_B_final);
+        KDR_inv(w,u) = 1 - KDR(w,u);
         %% Key Generation Rate
-        n_equal = length(key_A_final);
+        n_equal = length(key_A_final) - n_err;
         
         KGR(w,u) = n_equal/(n*Nit);
         
 
     end
-
+    clear threshold_A_min
+    clear threshold_A_max
+    clear threshold_B_min
+    clear threshold_B_max
 end
 close(progbar);
 
@@ -122,4 +127,3 @@ xlabel('SNR');
 ylabel('KGR');
 title('Key Generation Rate');
 legend('m = 0','m = 0.2','m = 0.4','m = 0.6','m = 0.8');
-

@@ -1,7 +1,7 @@
 clc; clear variables; % close all;
 
 %% Parâmetros da modulação
-Nit = 1e4;      % Número de iterações
+Nit = 1e5;      % Número de iterações
 SNR = 0:5:30;   % Valores de SNR para simular
 M = 4;          % Ordem da modulação
 k = log2(M);    % Número de bits em cada símbolo
@@ -139,5 +139,5 @@ title('Key Generation Rate');
 legend;
 
 %% Salvar dados
-fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA.m'
+fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA.m';
 save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');

@@ -137,3 +137,7 @@ xlabel('SNR');
 ylabel('KGR');
 title('Key Generation Rate');
 legend;
+
+%% Salvar dados
+fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA.m'
+save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');

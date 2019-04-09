@@ -19,10 +19,10 @@ pdp = exp(-(0:L-1)/c_att);
 pdp = pdp'/sum(pdp);        % Channel Power Profile (linear)
 
 %% Parâmetros do Quantizador
-alpha = 0:0.2:0.8;      % Valores de alpha para simular
-d = 32;                 % Tamanho de cada bloco
-H_A = zeros(N, Nit);    % Vetor para armazenar medidas em Alice
-H_B = zeros(N, Nit);    % Vetor para armazenar medidas em Bob
+alpha = 0;                          % Valor de alpha para simular
+bloco = [16; 32; 64; 128; 256];     % Tamanho de cada bloco
+H_A = zeros(N, Nit);                % Vetor para armazenar medidas em Alice
+H_B = zeros(N, Nit);                % Vetor para armazenar medidas em Bob
 
 %% Inicializando simulação
 cont = 0;
@@ -31,7 +31,7 @@ progbar = waitbar(0, 'Initialization waitBar...', 'Name', barStr);
 KDR = zeros(length(SNR), length(alpha));
 KGR = zeros(length(SNR), length(alpha));
 
-for iAlpha = 1:length(alpha) % Loop de alpha
+for iBloco = 1:length(bloco) % Loop de alpha
     
     for iSNR = 1:length(SNR) % Loop de SNR
         
@@ -81,8 +81,8 @@ for iAlpha = 1:length(alpha) % Loop de alpha
         info_A = tratamento(H_A, 'fine-grained'); % Obtem informação em Alice
         info_B = tratamento(H_B, 'fine-grained'); % Obtem informação em Bob
         
-        key_A = msdQuant(info_A, alpha(iAlpha), d); % Quantiza em Alice
-        key_B = msdQuant(info_B, alpha(iAlpha), d); % Quantiza em Bob
+        key_A = msdQuant(info_A, alpha, bloco(iBloco)); % Quantiza em Alice
+        key_B = msdQuant(info_B, alpha, bloco(iBloco)); % Quantiza em Bob
         
         idx_B = find(key_B == 5); % Índices a serem descartados em Alice
         idx_A = find(key_A == 5); % Índices a serem descartados em Bob
@@ -95,13 +95,13 @@ for iAlpha = 1:length(alpha) % Loop de alpha
         key_B(idx_C) = []; % Descarta bits em Bob
         
         %% Key Disagreement Rate
-        [n_err, KDR(iSNR, iAlpha)] = biterr(key_A, key_B);
+        [n_err, KDR(iSNR, iBloco)] = biterr(key_A, key_B);
         
         %% Key Generation Rate
         n_equal = length(key_A);
-        KGR(iSNR, iAlpha) = n_equal/(2*Nst*Nit);
+        KGR(iSNR, iBloco) = n_equal/(2*Nst*Nit);
         
-        fprintf('Para SNR %d dB e alpha %d foi obtida uma KDR de %d.\n', SNR(iSNR), alpha(iAlpha), KDR(iSNR, iAlpha))
+        fprintf('Para SNR %d dB e bloco de tamanho %d foi obtida uma KDR de %d.\n', SNR(iSNR), bloco(iBloco), KDR(iSNR, iBloco))
         
     end
     
@@ -112,10 +112,10 @@ close(progbar);
 %% Plota figuras
 % KDR:
 figure
-for k = 1:length(alpha)
+for k = 1:length(bloco)
     h = semilogy(SNR, KDR(:, k), 'LineWidth', 2);
     h.LineWidth = 2;
-    h.DisplayName = ['\alpha = ' num2str(alpha(k))];
+    h.DisplayName = ['bloco = ' num2str(bloco(k))];
     hold on;
 end
 grid on;
@@ -126,10 +126,10 @@ legend;
 
 % KGR:
 figure
-for k = 1:length(alpha)
+for k = 1:length(bloco)
     h = semilogy(SNR, KGR(:, k), 'LineWidth', 2);
     h.LineWidth = 2;
-    h.DisplayName = ['\alpha = ' num2str(alpha(k))];
+    h.DisplayName = ['bloco = ' num2str(bloco(k))];
     hold on;
 end
 grid on;
@@ -137,7 +137,3 @@ xlabel('SNR');
 ylabel('KGR');
 title('Key Generation Rate');
 legend;
-
-%% Salvar dados
-fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA.m'
-save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');

@@ -16,10 +16,10 @@ labelFontName = 'Times New Roman';
 axisFontName = 'Times New Roman';
 lineWidth = 1.0;
 
-%% KDR variando o bloco
+%% KGR variando o bloco
 figure
 for k = 1:length(bloco)
-    h = semilogy(SNR, KDR(:, k));
+    h = semilogy(SNR, KGR(:, k));
     h.DisplayName = ['bloco = ' num2str(bloco(k))];
     h.Marker = char(mark_vec(k));
     h.Color = char(color_vec(k));
@@ -28,7 +28,7 @@ for k = 1:length(bloco)
 end
 grid on;
 xlabel('SNR (dB)')
-ylabel('KDR')
+ylabel('KGR')
 axis([SNR(1) SNR(end) 1e-6 1]);
 
 %% Setting the figure up
@@ -51,5 +51,5 @@ lgd.FontName = labelFontName;
 lgd.Location = 'best';
 
 %% Saving figure
-print('Figures/FIG_KDR_MSQ_VARBLOCO.eps', '-depsc2')
-print('Figures/FIG_KDR_MSQ_VARBLOCO.png', '-dpng')
+print('Figures/FIG_KGR_MSQ_VARBLOCO.eps', '-depsc2')
+print('Figures/FIG_KGR_MSQ_VARBLOCO.png', '-dpng')

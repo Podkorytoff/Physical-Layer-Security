@@ -137,3 +137,6 @@ xlabel('SNR');
 ylabel('KGR');
 title('Key Generation Rate');
 legend;
+%% Salvar dados
+fileStr = 'Results/RES_QPSK_MSDQ_VARBLOCO';
+save(fileStr, 'SNR', 'bloco', 'KDR', 'KGR');

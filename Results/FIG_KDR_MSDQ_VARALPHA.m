@@ -29,7 +29,7 @@ end
 grid on;
 xlabel('SNR (dB)')
 ylabel('KDR')
-% axis([SNR(1) SNR(end) 0 1.1]);
+axis([SNR(1) SNR(end) 1e-6 1]);
 
 %% Setting the figure up
 % Setting figure properties:

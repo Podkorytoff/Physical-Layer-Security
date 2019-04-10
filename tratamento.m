@@ -10,7 +10,8 @@ function info = tratamento(a, mode)
 % Outputs:
 %   info: Valores a serem utilizados para quantização
 
-h = a(:);
+h = a.';
+h = h(:);
 
 switch(mode)
     case('real')

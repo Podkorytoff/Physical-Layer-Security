@@ -139,5 +139,5 @@ title('Key Generation Rate');
 legend;
 
 %% Salvar dados
-fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA.m';
+fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA';
 save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');

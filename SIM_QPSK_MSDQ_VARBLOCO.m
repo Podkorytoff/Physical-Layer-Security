@@ -28,8 +28,10 @@ H_B = zeros(N, Nit);                % Vetor para armazenar medidas em Bob
 cont = 0;
 barStr = 'Key Generation Simulation';
 progbar = waitbar(0, 'Initialization waitBar...', 'Name', barStr);
-KDR = zeros(length(SNR), length(alpha));
-KGR = zeros(length(SNR), length(alpha));
+KDR = zeros(length(SNR), length(bloco));
+KGR = zeros(length(SNR), length(bloco));
+pvFrequencyNIST = zeros(length(SNR), length(bloco));
+pvBlockFrequency = zeros(length(SNR), length(bloco));
 
 for iBloco = 1:length(bloco) % Loop de alpha
     
@@ -103,6 +105,16 @@ for iBloco = 1:length(bloco) % Loop de alpha
         
         fprintf('Para SNR %d dB e bloco de tamanho %d foi obtida uma KDR de %d.\n', SNR(iSNR), bloco(iBloco), KDR(iSNR, iBloco))
         
+        %% Teste de aleatoriedade NIST
+        fprintf('Test                      P-value    Result\n')
+        
+        [flag, pvFrequencyNIST(iSNR, iBloco)] = frequency_bit_test(key_A);
+        fprintf('Frequency  %23f   %s\n', pvFrequencyNIST(iSNR, iBloco), flag)
+        
+        Nbf = min(max(0.01*length(key_A), 20), 99);
+        [flag, pvBlockFrequency(iSNR, iBloco)] = frequency_block_test(key_A, Nbf);
+        fprintf('Frequency within a block  %f   %s\n\n', pvBlockFrequency(iSNR, iBloco), flag)
+        
     end
     
 end
@@ -139,4 +151,5 @@ title('Key Generation Rate');
 legend;
 %% Salvar dados
 fileStr = 'Results/RES_QPSK_MSDQ_VARBLOCO';
-save(fileStr, 'SNR', 'bloco', 'KDR', 'KGR');
+save(fileStr, 'SNR', 'bloco', 'KDR', 'KGR', ...
+    'pvFrequencyNIST', 'pvBlockFrequency');

@@ -20,7 +20,8 @@ pdp = pdp'/sum(pdp);        % Channel Power Profile (linear)
 
 %% Parâmetros do Quantizador
 alpha = 0;                          % Valor de alpha para simular
-bloco = [16; 32; 64; 128; 256];     % Tamanho de cada bloco
+% bloco = [16; 32; 64; 128; 256];     % Tamanho de cada bloco
+bloco = [16; 1280012; 2560008; 3840004; 5120000];
 H_A = zeros(N, Nit);                % Vetor para armazenar medidas em Alice
 H_B = zeros(N, Nit);                % Vetor para armazenar medidas em Bob
 

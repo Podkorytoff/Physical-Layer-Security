@@ -5,7 +5,7 @@ function p_value = frequency_bit_test(key)
             key(idx) = -1;
         end
     end
-    S = sum(key)/sqrt(length(key));
+    S = abs(sum(key))/sqrt(length(key));
     p_value = erfc(S/sqrt(2));
     
     

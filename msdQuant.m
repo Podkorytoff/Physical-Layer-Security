@@ -8,7 +8,7 @@ X(Nb*M+1:end) = [];
 Xb = reshape(X, [M, Nb]);
 
 % Inicializa vetor para armazenar bits das chaves:
-key = zeros(M, N/M);
+key = zeros(M, Nb);
 
 % Quantiza cada bloco:
 for m = 1:N/M

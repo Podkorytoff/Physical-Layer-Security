@@ -3,7 +3,9 @@ function key = msdQuant(X, alpha, M)
 % Divide a informação em blocos menores, onde cada bloco será uma coluna em
 % Xb:
 N = length(X);
-Xb = reshape(X, [M, N/M]);
+Nb = floor(N/M);
+X(Nb*M+1:end) = [];
+Xb = reshape(X, [M, Nb]);
 
 % Inicializa vetor para armazenar bits das chaves:
 key = zeros(M, N/M);

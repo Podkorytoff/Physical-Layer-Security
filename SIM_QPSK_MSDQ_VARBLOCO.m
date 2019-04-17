@@ -73,7 +73,7 @@ for iBloco = 1:length(bloco) % Loop de alpha
             H_B(:, iIt) = fft(chanest_A, N);
             
             cont = cont + 1;
-            prog = cont/(Nit*length(SNR)*length(alpha));
+            prog = cont/(Nit*length(SNR)*length(bloco));
             perc = 100*prog;
             waitbar(prog, progbar, sprintf('%.2f%% Concluded', perc));
             
@@ -106,14 +106,14 @@ for iBloco = 1:length(bloco) % Loop de alpha
         fprintf('Para SNR %d dB e bloco de tamanho %d foi obtida uma KDR de %d.\n', SNR(iSNR), bloco(iBloco), KDR(iSNR, iBloco))
         
         %% Teste de aleatoriedade NIST
-        fprintf('Test                      P-value    Result\n')
+        fprintf('Test                      P-value \n')
         
-        [flag, pvFrequencyNIST(iSNR, iBloco)] = frequency_bit_test(key_A);
-        fprintf('Frequency  %23f   %s\n', pvFrequencyNIST(iSNR, iBloco), flag)
+        [pvFrequencyNIST(iSNR, iBloco)] = frequency_bit_test(key_A);
+        fprintf('Frequency  %23f \n', pvFrequencyNIST(iSNR, iBloco))
         
         Nbf = min(max(0.01*length(key_A), 20), 99);
-        [flag, pvBlockFrequency(iSNR, iBloco)] = frequency_block_test(key_A, Nbf);
-        fprintf('Frequency within a block  %f   %s\n\n', pvBlockFrequency(iSNR, iBloco), flag)
+        [pvBlockFrequency(iSNR, iBloco)] = frequency_block_test(key_A, Nbf);
+        fprintf('Frequency within a block  %f \n\n', pvBlockFrequency(iSNR, iBloco))
         
     end
     

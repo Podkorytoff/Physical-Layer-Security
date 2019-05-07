@@ -21,9 +21,10 @@ pdp = pdp'/sum(pdp);        % Channel Power Profile (linear)
 %% Parâmetros do Quantizador
 alpha = 0;                          % Valor de alpha para simular
 % bloco = [16; 32; 64; 128; 256];     % Tamanho de cada bloco
-bloco = [16; 1280000; 2560000; 3840000; 5120000];
+bloco = [16; 1280000; 2560000];% 3840000; 5120000];
 H_A = zeros(N, Nit);                % Vetor para armazenar medidas em Alice
 H_B = zeros(N, Nit);                % Vetor para armazenar medidas em Bob
+method = 'real';
 
 %% Inicializando simulação
 cont = 0;
@@ -81,8 +82,8 @@ for iBloco = 1:length(bloco) % Loop de alpha
         end
         
         %% Quantização
-        info_A = tratamento(H_A, 'fine-grained'); % Obtem informação em Alice
-        info_B = tratamento(H_B, 'fine-grained'); % Obtem informação em Bob
+        info_A = tratamento(H_A, method); % Obtem informação em Alice
+        info_B = tratamento(H_B, method); % Obtem informação em Bob
         
         key_A = msdQuant(info_A, alpha, bloco(iBloco)); % Quantiza em Alice
         key_B = msdQuant(info_B, alpha, bloco(iBloco)); % Quantiza em Bob
@@ -151,6 +152,6 @@ ylabel('KGR');
 title('Key Generation Rate');
 legend;
 %% Salvar dados
-fileStr = 'Results/RES_QPSK_MSDQ_VARBLOCO';
+fileStr = ['Results/RES_QPSK_MSDQ_VARBLOCO_' method];
 save(fileStr, 'SNR', 'bloco', 'KDR', 'KGR', ...
     'pvFrequencyNIST', 'pvBlockFrequency');

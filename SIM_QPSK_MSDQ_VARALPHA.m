@@ -17,6 +17,7 @@ L = 6;                      % Comprimento do canal
 c_att = 2;                  % Fator de decaimento exponencial
 pdp = exp(-(0:L-1)/c_att);
 pdp = pdp'/sum(pdp);        % Channel Power Profile (linear)
+method = 'real';
 
 %% Parâmetros do Quantizador
 alpha = 0:0.2:0.8;      % Valores de alpha para simular
@@ -139,5 +140,5 @@ title('Key Generation Rate');
 legend;
 
 %% Salvar dados
-fileStr = 'Results/RES_QPSK_MSDQ_VARALPHA';
+fileStr = ['Results/RES_QPSK_MSDQ_VARALPHA_' method];
 save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');

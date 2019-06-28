@@ -17,8 +17,8 @@ for i = 1:length(X)
     CDF(i) = count/length(X);
 end
 CDF = sort(CDF);
-% Xord = sort(X);
-% figure; plot(Xord, CDF)
+Xord = sort(X);
+figure; plot(Xord, CDF)
 n_quant = (max(CDF) - min(CDF))/4;
 for i = 1:length(X)
      if(min(CDF) <= X(i) && X(i) < (min(CDF)+ n_quant))

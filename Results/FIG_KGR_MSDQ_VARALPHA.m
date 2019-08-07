@@ -10,7 +10,7 @@ load(char(fileStr));
 %% Parameters for figure setup
 mark_vec = {'o', '+', '*', 'x', 's', '^', 'v'};
 color_vec = {'b', 'r', 'g', 'c', 'k', 'y', 'm'};
-left = 10; botton = 5; width = 9; height = 7; % Sizes for IEEE article
+left = 10; botton = 5; width = 9; height = 5; % Sizes for IEEE article
 fontSize = 8;
 labelFontName = 'Times New Roman';
 axisFontName = 'Times New Roman';
@@ -29,7 +29,7 @@ end
 grid on;
 xlabel('SNR (dB)')
 ylabel('KGR')
-axis([SNR(1) SNR(end) 1e-6 1]);
+axis([SNR(1) SNR(end) 0.3 1]);
 
 %% Setting the figure up
 % Setting figure properties:

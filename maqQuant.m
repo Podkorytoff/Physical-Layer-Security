@@ -1,8 +1,8 @@
-function key = maqQuant(X)
+function key = maqQuant(X,n)
 %x é o vetor de medidas
 %cdf é a função distribuição cumulativa para cada medida
 key = [];
-
+%X = info_A;
 %%ESTIMANDO A CDF
 CDF = zeros(length(X), 1);
 % Xord = sort(X);
@@ -16,18 +16,23 @@ for i = 1:length(X)
     end
     CDF(i) = count/length(X);
 end
+
+%n = 4;
 CDF = sort(CDF);
-% Xord = sort(X);
-% figure; plot(Xord, CDF)
-n_quant = (max(CDF) - min(CDF))/4;
-for i = 1:length(X)
-     if(min(CDF) <= X(i) && X(i) < (min(CDF)+ n_quant))
-         key = [key; 0; 0];
-     elseif((min(CDF) + n_quant) <= X(i) && X(i) < (min(CDF)+ 2*n_quant))
-         key = [key; 0; 1];
-     elseif((min(CDF) + 2*n_quant) <= X(i) && X(i) < (min(CDF)+ 3*n_quant))
-         key = [key; 1; 0];
-     elseif((min(CDF) + 3*n_quant) <= X(i) && X(i) <= max(CDF))
-         key = [key; 1; 1];
-     end
+Xord = sort(X);
+%figure; plot(Xord, CDF)
+p = (1:(n-1))/n;
+
+for i = 1:length(p)
+    [~,n_index(i)] = min(abs(CDF - p(i)));
 end
+
+x_quant = Xord(n_index);
+
+
+for i = 1:length(X)
+     bit = sum(X(i) < x_quant);
+     y = bin2gray(bit, 'pam', n);
+     key(:,i) = de2bi(y, log2(n));
+end
+key = key(:);

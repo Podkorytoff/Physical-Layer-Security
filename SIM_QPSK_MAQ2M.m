@@ -80,16 +80,16 @@ for iSNR = 1:length(SNR) % Loop de SNR
     info_A = tratamento(H_A, 'fine-grained'); % Obtem informação em Alice
     info_B = tratamento(H_B, 'fine-grained'); % Obtem informação em Bob
 
-    key_A = maqQuant(info_A); % Quantiza em Alice
-    key_B = maqQuant(info_B); % Quantiza em Bob
+    key_A = maqQuant(info_A,2); % Quantiza em Alice
+    key_B = maqQuant(info_B,2); % Quantiza em Bob
 
 
     %% Key Disagreement Rate
-    [n_err, KDR(iSNR)] = biterr(key_A, key_B);
+   [n_err, KDR(iSNR)] = biterr(key_A, key_B);
 
     %% Key Generation Rate
-    n_equal = length(key_A);
-    KGR(iSNR) = n_equal/(2*Nst*Nit);
+   n_equal = length(key_A);
+   KGR(iSNR) = n_equal/(2*Nst*Nit);
 
 
 end
@@ -110,7 +110,7 @@ xlabel('SNR');
 ylabel('KDR');
 title('Key Disagreement Rate - Multibit Adaptive Quantization');
 legend;
-
+ 
 % KGR:
 figure
 h = semilogy(SNR, KGR, 'LineWidth', 2);
@@ -123,5 +123,5 @@ title('Key Generation Rate - Multibit Adaptive Quantization');
 legend;
 
 %% Salvar dados
-%fileStr = ['Results/RES_QPSK_MSDQ_VARALPHA_' method];
-%save(fileStr, 'SNR', 'alpha', 'KDR', 'KGR');
+fileStr = ['Results/RES_QPSK_MSDQ_VARALPHA_' method];
+save(fileStr, 'SNR', 'info_A', 'info_B', 'KGR', 'KDR', 'key_A', 'key_B');

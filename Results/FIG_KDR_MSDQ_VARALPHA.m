@@ -2,7 +2,7 @@ clear variables; %close all;
 
 %% Reading data
 fileStr = {
-    'RES_QPSK_MSDQ_VARALPHA'
+    'RES_QPSK_MSDQ_VARALPHA_real'
     };
 
 load(char(fileStr));
@@ -10,7 +10,7 @@ load(char(fileStr));
 %% Parameters for figure setup
 mark_vec = {'o', '+', '*', 'x', 's', '^', 'v'};
 color_vec = {'b', 'r', 'g', 'c', 'k', 'y', 'm'};
-left = 10; botton = 5; width = 9; height = 7; % Sizes for IEEE article
+left = 10; botton = 5; width = 9; height = 5; % Sizes for IEEE article
 fontSize = 8;
 labelFontName = 'Times New Roman';
 axisFontName = 'Times New Roman';
@@ -51,5 +51,5 @@ lgd.FontName = labelFontName;
 lgd.Location = 'best';
 
 %% Saving figure
-print('Figures/FIG_KDR_MSQ_VARALPHA.eps', '-depsc2')
-print('Figures/FIG_KDR_MSQ_VARALPHA.png', '-dpng')
+%print('Figures/FIG_KDR_MSQ_VARALPHA.eps', '-depsc2')
+%print('Figures/FIG_KDR_MSQ_VARALPHA.png', '-dpng')
